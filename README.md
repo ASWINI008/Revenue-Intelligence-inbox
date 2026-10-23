@@ -1,260 +1,147 @@
 # Revenue Intelligence Inbox
 
-A professional sales-operations web application built for the **Volopay assignment**. The application empowers sales managers to review multi-source sales call and meeting activity, understand rep workloads and conversation outcomes, triage escalated accounts, evaluate and override transparent rule-based routing, manage repeated imports with strict idempotency and auditability, and generate RFC 4180 compliant exports accompanied by an automated export manifest.
+**A conversation intelligence application that helps sales managers organise, review, and route call and meeting records into actionable outputs.**
 
----
+## 🚀 Live Demo
 
-## 1. Project Overview
+**Deployed Application:** https://revenu-ai.netlify.app/
 
-In fast-paced B2B sales organizations, customer touchpoints occur across phone calls, discovery sessions, product demonstrations, and contract negotiations. Without unified intelligence, critical enterprise escalations go unassigned, follow-up deadlines slip, and sales managers lack actionable insight into deal health.
+## 📌 Project Overview
 
-**Revenue Intelligence Inbox** solves this by providing:
-- **Real-Time KPI Dashboard:** Dynamic sales metrics and visual analytics derived directly from canonical ground truth data.
-- **Searchable Conversation Inbox:** Multi-column sorting, filtering, pagination, and inline operational status updates.
-- **Manager Triage ("Needs Attention"):** Priority queue for urgent customer escalations, overdue commitments, and unassigned leads.
-- **Deterministic Routing Engine:** Transparent, rule-based decision logic that exposes triggering rules, explains conflicting objectives, and facilitates audited manager overrides.
-- **Idempotent Ingestion Engine:** Stable-key deduplication preventing double-counting, alongside a **Manual Correction Precedence Policy** that prevents stale imports from clobbering manager overrides.
-- **Data Quality Diagnostics:** Separation between critical schema errors (missing IDs, bad dates, invalid priorities) and business policy warnings.
-- **RFC 4180 Exports & Manifest:** Client-side downloadable CSV and JSON exports with an automated validation manifest.
-- **Audited Findings & Ground Truth Evidence:** In-app ledger documenting verified operational anomalies (`REV-1004`, `REV-1018`, `REV-1009`, `REV-1015`, `REV-1001`, `REV-1010`, `REV-1022`) and routing trade-offs.
-- **Executive Presentation:** Standalone 5-slide PowerPoint (`presentation/revenue_intelligence_presentation.pptx`) and accompanying slide deck specification (`presentation/SLIDES.md`).
-- **Editorial Console UI:** Built specifically with an Editorial Sales Operations aesthetic (warm off-white `#F7F6F2`, `#252923` deep charcoal, `#356B55` forest green, `#C77B45` attention orange, `#E3E2DC` soft grey borders, Inter + JetBrains Mono, no generic AI dashboard tropes).
+Revenue Intelligence Inbox is designed to simplify how sales managers handle conversation records collected from multiple sources. It brings call records, meeting information, transcripts, and notes into an organised workflow.
 
----
+The application helps managers review conversation activity, identify records that need attention, understand routing decisions, and organise outputs for further action.
 
-## 2. Technology Stack
+The primary focus is to make conversation management more efficient, transparent, and reliable.
 
-- **Frontend Framework:** React 19 (SPA) with Vite build system
-- **Language:** Modern JavaScript (ES Modules)
-- **Styling:** Bootstrap 5.3 + Bootstrap Icons + Custom SaaS CSS (*No Tailwind CSS*)
-- **Visual Analytics:** Chart.js + react-chartjs-2
-- **Iconography:** Lucide React & Bootstrap Icons
-- **Data Ingestion:** Papa Parse (CSV) and native JSON parsing
-- **Data Export:** RFC 4180 CSV generation, formatted JSON serialization, and Manifest generator
-- **Presentation Generation:** PptxGenJS (generates editable `.pptx` slides)
-- **Persistence:** Browser `localStorage` (configured for single-user manager workflow)
-- **Test Suite:** Vitest + React Testing Library + JSDOM
-- **Version Control:** Git
+## 🎯 Objectives
 
----
+* Centralise call and meeting records in one interface.
+* Provide visibility into conversation activity and transcript availability.
+* Route conversation records to appropriate destinations.
+* Support evidence-based decisions with traceable information.
+* Identify records that require manual review.
+* Maintain reliable records when data is imported repeatedly or updated.
+* Organise outputs with a structured manifest for traceability.
 
-## 3. Architecture & Project Structure
+## ✨ Key Features
 
-```
-revenue-intelligence-inbox/
-├── data/                               # Canonical datasets and test fixture files
-│   ├── sample_conversations.json       # Ground truth canonical baseline (25 records)
-│   ├── sample_conversations.csv        # Ground truth CSV counterpart
-│   ├── test_duplicate_import.csv       # Test dataset for 100% duplicate detection
-│   ├── test_update_import.csv          # Test dataset for updates and precedence
-│   └── test_malformed_import.csv       # Test dataset for validation rejection
-├── exports/                            # Physical export directory
-│   ├── conversations_master.csv        # Full dataset export (CSV)
-│   ├── conversations_master.json       # Full dataset export (JSON)
-│   ├── needs_attention_export.csv      # Needs Attention queue export (CSV)
-│   ├── needs_attention_export.json     # Needs Attention queue export (JSON)
-│   ├── routing_decisions_export.csv    # Evaluated decisions and overrides (CSV)
-│   ├── manifest.json                   # Automated export manifest (JSON)
-│   └── manifest.csv                    # Automated export manifest (CSV)
-├── presentation/                       # Presentation deliverables
-│   ├── revenue_intelligence_presentation.pptx  # Editable 5-slide PowerPoint file
-│   ├── generate_pptx.js                # PPTX generator script
-│   └── SLIDES.md                       # Complete slide-by-slide transcript & layout
-├── demo/                               # Demonstration deliverables
-│   └── DEMO_SCRIPT.md                  # 3-minute narration script & visual cue points
-├── tests/                              # Automated test suites (Vitest)
-│   ├── metrics.test.js                 # KPI calculation & zero-data handling tests
-│   ├── import_idempotency.test.js      # Deduplication, update & precedence tests
-│   ├── routing_engine.test.js          # Rule evaluation & override tests
-│   ├── data_quality.test.js            # Hard schema errors vs soft warnings tests
-│   ├── export_manifest.test.js         # CSV escaping, JSON schema & manifest tests
-│   └── ui_smoke.test.jsx               # React component rendering smoke tests
-├── src/
-│   ├── components/                     # Reusable React UI components
-│   │   ├── Sidebar.jsx                 # Restrained monochrome navigation with section headers
-│   │   ├── Navbar.jsx                  # Header with active scope, sync status, and search
-│   │   ├── Dashboard.jsx               # Horizontal metric strip, Attention Queue & Recent Activity
-│   │   ├── Inbox.jsx                   # Filterable, sortable conversation table & details panel
-│   │   ├── NeedsAttention.jsx          # Dedicated manager triage view
-│   │   ├── RoutingView.jsx             # Rule inspector, conflict case study & overrides
-│   │   ├── ImportView.jsx              # 5-step workflow & 1-click duplicate test runners
-│   │   ├── DataQualityView.jsx         # Health score, schema diagnostics & warning ledger
-│   │   ├── ExportView.jsx              # Download workspace & live manifest viewer
-│   │   ├── FindingsView.jsx            # Audited findings backed by exact record IDs
-│   │   ├── SettingsView.jsx            # System diagnostics, schema definitions & storage reset
-│   │   ├── ConversationDetailModal.jsx # Metadata & audit timeline drawer
-│   │   ├── EditModal.jsx               # Field editor with audit reason requirement
-│   │   └── OverrideModal.jsx           # Routing override modal with conflict view
-│   ├── services/
-│   │   ├── storageService.js           # LocalStorage wrapper & canonical seeding
-│   │   ├── routingEngine.js            # Deterministic rules & conflict engine
-│   │   ├── importService.js            # Ingestion, validation & deduplication
-│   │   ├── exportService.js            # RFC 4180 export & manifest builder
-│   │   ├── dataQualityService.js       # Data integrity health score analyzer
-│   │   └── pptxService.js              # Client-side PPTX generation & slides
-│   ├── styles/
-│   │   └── custom.css                  # Custom SaaS typography and card layout
-│   ├── App.jsx                         # Main application root
-│   └── main.jsx                        # React root entrypoint
-├── package.json
-├── vite.config.js
-└── vercel.json                         # Vercel deployment configuration
-```
+### 1. Conversation Dashboard
 
----
+Provides an overview of conversation activity, record status, transcript coverage, and routing information.
 
-## 4. Getting Started Locally
+### 2. Conversation Inbox
+
+Organises call and meeting records so that managers can inspect individual conversations and their available information.
+
+### 3. Evidence-Based Routing
+
+Helps categorise conversations based on available evidence and direct them towards relevant destinations.
+
+### 4. Human Review
+
+Supports manual review when the available information is incomplete, ambiguous, or insufficient to justify an automated decision.
+
+### 5. Import and Update Handling
+
+The intended workflow supports repeat imports without creating duplicate records and updates existing records when new information arrives.
+
+### 6. Structured Exports
+
+Organises processing results and routing information in a structured format, including source references, output paths, review status, and manual correction details.
+
+## 📊 Dataset Overview
+
+The assignment dataset contains:
+
+| Record Type | Number of Records |
+| ----------- | ----------------: |
+| Calls       |                30 |
+| Meetings    |                14 |
+| **Total**   |            **44** |
+
+The dataset includes conversation text for a subset of records. Missing transcripts must not be interpreted as proof that a conversation did not occur.
+
+## 🔄 Application Workflow
+
+1. **Import Records:** Load call and meeting records from the supplied data.
+2. **Organise Conversations:** Display records in a centralised inbox.
+3. **Review Available Evidence:** Inspect transcripts and supporting information.
+4. **Route Conversations:** Assign suitable destinations based on available evidence.
+5. **Flag Uncertain Cases:** Send ambiguous or incomplete records for human review.
+6. **Generate Outputs:** Organise the results and maintain a structured manifest.
+7. **Validate Updates:** Check that repeated imports do not create duplicates and that updates preserve applicable manual corrections.
+
+## 🛠️ Technology Stack
+
+Update this section to reflect the technologies actually used in your implementation.
+
+* **Frontend:** [Add the frontend framework]
+* **Styling:** [Add the styling framework or CSS approach]
+* **Backend:** [Add the backend technology, if applicable]
+* **Database:** [Add the database, if applicable]
+* **Deployment:** Netlify
+
+## ⚙️ Running Locally
+
+Follow these steps if the project uses a Node.js-based frontend.
 
 ### Prerequisites
-- Node.js: `v18.0.0` or higher (verified on Node `v24.12.0`)
-- npm: `v9.0.0` or higher (verified on npm `11.6.2`)
 
-### Installation Steps
-1. Clone or extract the repository into your local environment:
-   ```bash
-   cd Revenue
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the Vite development server:
-   ```bash
-   npm run dev
-   ```
-4. Open your browser and navigate to:
-   ```
-   http://localhost:5173
-   ```
+* Node.js
+* npm
+* Git
 
----
+### Installation
 
-## 5. Ground Truth Dataset & Key Findings
-
-Because no pre-existing dataset was present in the blank workspace, a canonical reference dataset was engineered into `data/sample_conversations.json` and `data/sample_conversations.csv` reflecting real-world sales operations challenges.
-
-### Three Important Findings (Backed by Exact Record IDs)
-
-1. **Finding 1: Unassigned High-Risk Enterprise Escalations**
-   - **Traceable Evidence:** Record [`REV-1004`](./data/sample_conversations.json) (*Apex Logistics*, Enterprise tier, CFO blocked renewal due to pricing, follow-up overdue by 6 days, assigned owner is blank) and Record [`REV-1018`](./data/sample_conversations.json) (*DataStream Inc*, Enterprise tier, SLA penalty threat, unassigned).
-   - **Business Implication:** Enterprise customers with high ARR are at imminent risk of churn due to lack of immediate executive ownership.
-2. **Finding 2: Stalled Follow-Ups Post-Demo ("Action Required")**
-   - **Traceable Evidence:** Record [`REV-1009`](./data/sample_conversations.json) (*Nexus Tech*, demo concluded Oct 10 with promised pricing deck overdue since Oct 15) and Record [`REV-1015`](./data/sample_conversations.json) (*Vanguard Health*, compliance follow-up overdue by 6 days).
-   - **Business Implication:** Reps fail to fulfill commitments during the critical 48-hour post-meeting window, causing deal velocity to collapse.
-3. **Finding 3: Rep Workload Imbalance & Win Concentration**
-   - **Traceable Evidence:** Senior AE **Alex Rivera** accounts for 100% of closed won deals in the period ([`REV-1001`](./data/sample_conversations.json), [`REV-1010`](./data/sample_conversations.json), [`REV-1022`](./data/sample_conversations.json)), whereas **Jordan Lee** manages 4 stalled negotiations without a closed win ([`REV-1007`](./data/sample_conversations.json), [`REV-1009`](./data/sample_conversations.json), [`REV-1015`](./data/sample_conversations.json), [`REV-1021`](./data/sample_conversations.json)).
-   - **Business Implication:** Extreme pipeline risk due to single-rep dependency; stalled reps require targeted coaching and capacity rebalancing.
-
----
-
-## 6. How Conversation Routing Works
-
-The platform uses a deterministic, rule-based routing engine rather than an opaque "black-box" model.
-
-### Active Rules:
-1. **`RULE_ENTERPRISE_ESCALATION`:** If account tier is `Enterprise` AND (`is_escalated === true` OR `outcome === 'Escalated'`), set priority to `Urgent` and suggest owner `Alex Rivera` (Senior Enterprise AE).
-2. **`RULE_OVERDUE_STALLED_FOLLOWUP`:** If `follow_up_status === 'Overdue'` AND `outcome === 'Action Required'`, elevate priority to `Urgent`.
-3. **`RULE_UNASSIGNED_INBOUND_TIER`:** If record has no assigned owner, match by tier: Enterprise &rarr; Alex Rivera, Mid-Market &rarr; Taylor Kim, SMB &rarr; Jordan Lee.
-4. **`RULE_COMPETITIVE_THREAT`:** If notes or urgency reason mentions "competitor", "RFP", or "churn", elevate priority to `Urgent`.
-5. **`RULE_CLOSED_WON_HANDOFF`:** If `outcome === 'Closed Won'`, route suggested owner to `Customer Success Team`.
-
-### Conflict Handling & Case Study: The Difficult Routing Decision (REV-1012)
-- **Context:** Record [`REV-1012`](./data/sample_conversations.json) for **FinVantage Corp** ($250k ARR expansion). An aggressive competitor displacement offer triggered an escalation.
-- **The Conflict:** Rule 1 ("Enterprise Escalation &rarr; Alex Rivera") directly conflicted with Rule 2 ("Preserve Existing Rep Taylor Kim").
-- **System Resolution:** Rather than making an arbitrary automated assignment, the engine flagged the status as **`Pending Review`** with explicit conflict explanation.
-- **Manager Override:** The sales manager reviews the conflict and executes an audited override, assigning Alex Rivera as executive co-sponsor while keeping Taylor Kim on delivery, logging the justification in the immutable audit trail.
-
----
-
-## 7. Data Ingestion & Deduplication Architecture
-
-### Stable Key Matching Strategy
-Records are matched using a dual-key strategy:
-1. **Primary Key:** Record `id` (e.g. `REV-1001`).
-2. **Fallback Composite Key:** If `id` is absent, the system constructs a composite key: `COMPOSITE:${account_name}|${contact_name}|${date}`.
-
-### Idempotent Ingestion Policy
-- **Identical Records:** If an incoming record matches an existing record across all data fields, it is categorized as a duplicate and **ignored** (0 added, 0 double-counted).
-- **New Records:** Evaluated against routing rules and appended to the dataset.
-- **Manual Edit Precedence Policy:** If an existing record was manually modified or overridden by a manager, incoming records **never overwrite manual corrections** (owner, priority, outcome). Non-conflicting newer fields (such as updated notes or duration) are merged, and an `IMPORT_UPDATE_MERGE` notice is appended to the audit history.
-- **Malformed Records:** Validated row-by-row; rows missing account/contact or containing invalid date formats are rejected and detailed in the Ingestion Summary.
-
----
-
-## 8. Data Quality Diagnostics
-
-The application runs continuous diagnostics on the active dataset:
-- **Critical Schema Errors:** Missing primary IDs, duplicate primary keys, missing account/contact, invalid date formats, and invalid priority levels.
-- **Business Policy Warnings:** Unassigned leads, overdue follow-up commitments, and unresolved routing conflicts.
-- **Health Score:** A dynamic percentage metric reflecting overall dataset compliance.
-
----
-
-## 9. Exports & Export Manifest
-
-Users can download:
-- All Conversations (`CSV` or `JSON`)
-- Needs Attention Queue (`CSV` or `JSON`)
-- Routing Decisions Log (`CSV` or `JSON`)
-- Export Manifest (`CSV` or `JSON`)
-
-All CSVs follow strict RFC 4180 escaping (properly wrapping commas, quotes, and line breaks). Every export is paired with a manifest entry recording filename, export type, ISO timestamp, record count, format, filter scope, schema version (`1.0.0`), data source, and validation status.
-
----
-
-## 10. Automated Testing
-
-The project includes 6 automated test suites with 20 unit and integration tests written in Vitest.
-
-To run the test suite:
 ```bash
-npm test
+git clone <your-github-repository-url>
+cd <your-project-folder>
+npm install
 ```
 
-### Verified Behaviors:
-- [x] Application components render without crashing (React Testing Library)
-- [x] Dashboard metrics calculate accurately from canonical data
-- [x] Empty datasets handled without NaN or division by zero
-- [x] Dual-key generation and validation error identification
-- [x] 100% Idempotent duplicate import (0 duplicates added)
-- [x] Record updates follow documented update policy
-- [x] Manual manager corrections survive subsequent imports
-- [x] Deterministic routing rules evaluate correctly
-- [x] Rule conflicts identified and flagged as "Pending Review"
-- [x] Manager routing overrides record prior decisions and audit reasons
-- [x] Hard schema errors distinguished from soft business warnings
-- [x] RFC 4180 CSV escaping handles quotes and commas correctly
-- [x] Generated export files match manifest entries in `exports/`
+### Start the Development Server
 
----
-
-## 11. Deployment Instructions
-
-### Build Verification
-To compile the production build:
 ```bash
-npm run build
+npm run dev
 ```
-The optimized client bundle is written to the `dist/` directory.
 
-### Deploying to Vercel
-1. Ensure the code is committed to Git:
-   ```bash
-   git add .
-   git commit -m "feat: complete revenue intelligence inbox implementation"
-   ```
-2. Push to your GitHub / GitLab repository.
-3. In the Vercel dashboard, click **"Add New Project"** and import the repository.
-4. Vercel automatically detects the Vite framework and uses `vercel.json` for routing rewrites.
-5. Alternatively, deploy via Vercel CLI:
-   ```bash
-   npx vercel --prod
-   ```
+Open the local URL displayed in your terminal.
 
----
+> **Note:** These commands assume a Node.js frontend project. Update them if your repository uses a different setup or requires separate backend services.
 
-## 12. Known Limitations & Documented Assumptions
+## 🧪 Testing and Validation
 
-1. **Single-User LocalStorage Persistence:** In accordance with the single-user requirements, state persistence utilizes browser `localStorage`. Data changes are persisted in the active browser profile and do not sync across different physical machines or browsers. In an enterprise production setting, this would be replaced with a PostgreSQL database and REST/GraphQL API.
-2. **Dataset Assumption:** Because no pre-existing dataset was provided in the initial workspace, a canonical reference dataset was authored into `data/sample_conversations.json` containing 25 records with realistic sales operations complexities.
-3. **Deterministic vs ML Routing:** The routing engine deliberately uses deterministic business logic to ensure complete governance explainability for sales managers.
+The following checks are important for validating the application:
+
+* Verify that all 44 source records are accounted for.
+* Confirm that repeated imports do not create duplicate records.
+* Verify that updated transcripts appear on existing records.
+* Check that manual route corrections persist when required.
+* Ensure that missing transcript content is not treated as evidence of a nonexistent conversation.
+* Verify that routing decisions are supported by available evidence.
+* Confirm that exported files and manifest entries correspond to the correct source records.
+
+Only mark these checks as passed after testing them against the actual application.
+
+## 🔮 Future Enhancements
+
+* Improve filtering by person, source type, date, and review status.
+* Add clearer evidence previews for routing decisions.
+* Improve prioritisation of conversations requiring manual attention.
+* Strengthen import validation and update tracking.
+* Provide more detailed reporting on conversation activity.
+* Improve export validation and error handling.
+
+## 👩‍💻 Project Information
+
+**Project Name:** Revenue Intelligence Inbox
+**Project Type:** Conversation Intelligence and Workflow Management
+**Live Application:** https://revenu-ai.netlify.app/
+
+## 📝 Conclusion
+
+Revenue Intelligence Inbox aims to turn scattered call and meeting information into organised, traceable, and actionable outputs. By combining conversation review, evidence-based routing, human oversight, and reliable data handling, the application supports a more structured approach to sales conversation management.
+
+The project emphasises explainability and data reliability so that managers can make informed decisions based on the available evidence.
+
