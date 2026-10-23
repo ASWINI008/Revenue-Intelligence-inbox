@@ -1,0 +1,6 @@
+"export_filename","export_type","export_timestamp","record_count","format","filter_scope","schema_version","data_source","validation_status"
+"conversations_master.csv","ALL_CONVERSATIONS","2026-10-22T13:25:58.567Z","25","CSV","All Records (Unfiltered)","1.0.0","Revenue Intelligence Inbox (Volopay)","RFC_4180_VALID"
+"conversations_master.json","ALL_CONVERSATIONS","2026-10-22T13:25:58.567Z","25","JSON","All Records (Unfiltered)","1.0.0","Revenue Intelligence Inbox (Volopay)","JSON_SCHEMA_VALID"
+"needs_attention_export.csv","NEEDS_ATTENTION","2026-10-22T13:25:58.567Z","9","CSV","Escalated | Overdue | Unassigned | Pending Review","1.0.0","Revenue Intelligence Inbox (Volopay)","RFC_4180_VALID"
+"needs_attention_export.json","NEEDS_ATTENTION","2026-10-22T13:25:58.567Z","9","JSON","Escalated | Overdue | Unassigned | Pending Review","1.0.0","Revenue Intelligence Inbox (Volopay)","JSON_SCHEMA_VALID"
+"routing_decisions_export.csv","ROUTING_DECISIONS","2026-10-22T13:25:58.567Z","25","CSV","All Evaluated Records","1.0.0","Revenue Intelligence Inbox (Volopay)","RFC_4180_VALID"

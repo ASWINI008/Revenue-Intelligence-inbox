@@ -1,0 +1,4 @@
+id,contact_name,contact_email,account_name,account_tier,rep_name,type,date,time,duration_minutes,outcome,priority,follow_up_status,follow_up_due_date,is_escalated,urgency_reason,notes,routing_status,assigned_owner
+,John Doe,jdoe@test.com,No ID Corp,SMB,Alex Rivera,Call,2026-10-20,10:00,15,Qualified,Medium,Pending,2026-10-25,false,,Missing identifier in row,Routed,Alex Rivera
+REV-9998,Jane Roe,bad-email,Invalid Date Corp,Mid-Market,Jordan Lee,Demo,NOT-A-DATE,14:00,30,Qualified,Medium,Pending,2026-10-25,false,,Invalid date format,Routed,Jordan Lee
+REV-9999,Bob Smith,bsmith@badpriority.com,Bad Priority Corp,Enterprise,Taylor Kim,Call,2026-10-20,12:00,20,Qualified,SUPER_URGENT_INVALID,Pending,2026-10-25,false,,Invalid priority value,Routed,Taylor Kim

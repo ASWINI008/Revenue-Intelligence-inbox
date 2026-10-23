@@ -1,0 +1,57 @@
+[
+  {
+    "export_filename": "conversations_master.csv",
+    "export_type": "ALL_CONVERSATIONS",
+    "export_timestamp": "2026-10-22T13:25:58.567Z",
+    "record_count": 25,
+    "format": "CSV",
+    "filter_scope": "All Records (Unfiltered)",
+    "schema_version": "1.0.0",
+    "data_source": "Revenue Intelligence Inbox (Volopay)",
+    "validation_status": "RFC_4180_VALID"
+  },
+  {
+    "export_filename": "conversations_master.json",
+    "export_type": "ALL_CONVERSATIONS",
+    "export_timestamp": "2026-10-22T13:25:58.567Z",
+    "record_count": 25,
+    "format": "JSON",
+    "filter_scope": "All Records (Unfiltered)",
+    "schema_version": "1.0.0",
+    "data_source": "Revenue Intelligence Inbox (Volopay)",
+    "validation_status": "JSON_SCHEMA_VALID"
+  },
+  {
+    "export_filename": "needs_attention_export.csv",
+    "export_type": "NEEDS_ATTENTION",
+    "export_timestamp": "2026-10-22T13:25:58.567Z",
+    "record_count": 9,
+    "format": "CSV",
+    "filter_scope": "Escalated | Overdue | Unassigned | Pending Review",
+    "schema_version": "1.0.0",
+    "data_source": "Revenue Intelligence Inbox (Volopay)",
+    "validation_status": "RFC_4180_VALID"
+  },
+  {
+    "export_filename": "needs_attention_export.json",
+    "export_type": "NEEDS_ATTENTION",
+    "export_timestamp": "2026-10-22T13:25:58.567Z",
+    "record_count": 9,
+    "format": "JSON",
+    "filter_scope": "Escalated | Overdue | Unassigned | Pending Review",
+    "schema_version": "1.0.0",
+    "data_source": "Revenue Intelligence Inbox (Volopay)",
+    "validation_status": "JSON_SCHEMA_VALID"
+  },
+  {
+    "export_filename": "routing_decisions_export.csv",
+    "export_type": "ROUTING_DECISIONS",
+    "export_timestamp": "2026-10-22T13:25:58.567Z",
+    "record_count": 25,
+    "format": "CSV",
+    "filter_scope": "All Evaluated Records",
+    "schema_version": "1.0.0",
+    "data_source": "Revenue Intelligence Inbox (Volopay)",
+    "validation_status": "RFC_4180_VALID"
+  }
+]
